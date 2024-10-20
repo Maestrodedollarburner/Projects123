@@ -1,0 +1,75 @@
+*{
+    padding: 0;
+    margin: 0;
+    border-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    width: 100vw;
+    height: 100vh;
+    
+}
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+
+}
+.sign-head{
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+label{
+    margin: 1rem 0;
+
+}
+form{
+    width: 50%;
+
+
+}
+.input input{
+    border-radius: 2rem;
+}
+.sink{
+    width: 30%;
+    margin: 0 auto;
+
+}
+.sink button{
+    width:100%;
+    border-radius: 2rem;
+}
+.links{
+    text-align: center;
+    margin-top: 1rem;
+}
+.fog-link{
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+}
+#signup .form-group, #shep .form-group{
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    gap: 1rem;
+}
+#signup{
+    margin-top: 5rem;
+}
+.form-group button, .form-group a{
+    border-radius: 2rem;
+    
+}
+#shep .form-group button{
+    margin-top: 1rem;
+}
