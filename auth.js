@@ -1,55 +1,41 @@
-const fullname = document.querySelector('#fullname')
-const email = document.querySelector('#email')
-const staffId = document.querySelector('#staffID')
-const password = document.querySelector('#password')
-const submit = document.querySelector('.submit-btn')
-const err = ''
+const { StatusCodes } = require("http-status-codes");
+const User = require("../models/user");
+const { BadRequestError, UnauthentiacatedError } = require("../errors");
+const bcrypt = require("bcryptjs");
+const asyncHandler = require("express-async-handler");
+const jwt = require("jsonwebtoken");
 
+//register
+const register = asyncHandler(async (req, res) => {
+  const user = await User.create({ ...req.body });
+  console.log(user)
+  const token = user.createJWT();
+  res
+    .status(StatusCodes.CREATED)
+    .json({ user: { email: user.email }, token });
+});
 
-
-submit.addEventListener('click',  async () => {
-  //   console.log(password.value, phone.value, email.value, fullname.value);
-  console.log({
-    fullname: fullname.value,
-    email: email.value,
-    staffId: staffId.value,
-    password: password.value,
-  })
-  try {
-    const data = await fetch("http://localhost:5000/api/v1/auth/register", {
-      method: "POST",
-      body: JSON.stringify({
-        fullname: fullname.value,
-        email: email.value,
-        staffId: staffId.value,
-        password: password.value,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const dd = await data.json();
-    if (dd.msg) {
-      err.textContent = dd.msg;
-      email.value = "";
-      password.value = "";
-      fullname.value = "";
-      staffId.value = "";
-    } else {
-      // localStorage.setItem("jwtToken", JSON.stringify(dd.token));
-      // localStorage.setItem("user-email", JSON.stringify(dd.user.email));
-      console.log(dd);
-      fullname.value = "";
-      email.value = "";
-      staffId.value = "";
-      password.value = "";
-      window.location.replace("signin.html");
-    }
-  } catch (error) {
-    console.log(error);
-    fullname.value = "";
-    email.value = "";
-    staffId.value = "";
-    password.value = "";
+//login
+const login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    throw new BadRequestError("please provide email and password");
   }
-})
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new UnauthentiacatedError("Invalid credentials");
+  }
+  //compare passwords
+  const isPasswordCorrect = await user.comparePassword(password)
+  if (!isPasswordCorrect) {
+    throw new UnauthentiacatedError("Invalid credentials");
+  }
+  console.log('signed in')
+  const token = user.createJWT();
+  res.status(StatusCodes.OK).json({ user: { email: user.email }, token });
+});
+
+module.exports = {
+  register,
+  login,
+};

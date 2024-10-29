@@ -1,79 +1,114 @@
-const name = document.querySelector('#meterName')
-const address = document.querySelector('#address')
-const meterNum = document.querySelector('#meterNum')
-const meterRead = document.querySelector('#meterReadings')
-const err = ''
-const saveBtn = document.querySelector('.save')
+const {
+  StatusCodes
+} = require("http-status-codes");
+const Sherp = require("../models/sherp");
+const {
+  BadRequestError,
+  NotFoundError
+} = require("../errors");
+const asyncHandler = require('express-async-handler')
 
-
-const overlay = document.querySelector('.overlay');
-const clsBtn = document.querySelector('.cls-btn')
-const confSelect = document.querySelector('#confirm');
-const mNum = document.querySelector('.m-num');
-const mRead = document.querySelector('.m-read');
-
-
-
-// clsBtn.addEventListener('click', () => {
-//     overlay.classList.remove('hidden')
-// })
-
-// if (confSelect.value === mNum.className) {
-//     mNum.classList.add('hidden')
-//     mRead.classList.remove('hidden')
-// } else {
-//     mRead.classList.add('hidden')
-//     mNum.classList.remove('hidden')
-
-// }
-
-// confSelect.addEventListener('change', () => {
-//     if (confSelect.value === mNum.className) {
-//         mNum.classList.add('hidden')
-//         mRead.classList.remove('hidden')
-//     } else {
-//         mRead.classList.add('hidden')
-//         mNum.classList.remove('hidden')
-
-//     }
-
-// })
-
-saveBtn.addEventListener('click', async() => {
-    overlay.classList.add('hidden')
-    const token = JSON.parse(localStorage.getItem("jwtToken"));
-  try {
-    const data = await fetch("http://localhost:5000/api/v1/auth/sherp", {
-      method: "POST",
-      body: JSON.stringify({
-        name: name.value,
-        address: address.value,
-        meterNum: meterNum.value,
-        meterRead: meterRead.value,
-      
-    }),
-      headers: {
-        "Content-Type": "application/json",
-         "Authorization": `Bearer ${token}`
-      },
-    });
-    const dd = await data.json();
-    if (dd.msg) {
-      err.textContent = dd.msg;
-    //   email.value = "";
-    //   password.value = "";
-    } else {
-    //   localStorage.setItem("jwtToken", JSON.stringify(dd.token));
-    //   localStorage.setItem("user-email", JSON.stringify(dd.user.email));
-      console.log(dd);
-    //   password.value = "";
-    //   email.value = "";
-      window.location.replace("dashboard.html");
-    }
-  } catch (error) {
-    console.log(error);
-    // password.value = "";
-    // email.value = ""    ;
-  }
+const getAllSherps = asyncHandler(async (req, res) => {
+  const sherp = await Sherp.find({
+    initBy: req.user.userId
+  }).sort("createdAt");
+  res.status(StatusCodes.OK).json({
+    sherp,
+    count: sherp.length
+  });
 })
 
+const createSherp = asyncHandler(async (req, res) => {
+  // req.body.initBy = req.user.email;
+  const sherp = await Sherp.create(req.body);
+  res.status(StatusCodes.CREATED).json({
+    sherp
+  });
+  // res.send(req.body)
+});
+
+const getSherp = asyncHandler(async (req, res) => {
+  const {
+    user: {
+      email
+    },
+    params: {
+      id: sherpId
+    },
+  } = req;
+  const sherp = await Sherp.findOne({
+    _id: sherpId,
+    initBy: email,
+  });
+  if (!email) {
+    throw new NotFoundError("No Sherp with id found");
+  }
+  res.status(StatusCodes.OK).json({
+    sherp
+  });
+});
+
+const updateSherp = asyncHandler(async (req, res) => {
+  const {
+    body: {
+      name,
+      address,
+      meterNum,
+      meterRead
+    },
+    user: {
+      userId
+    },
+    params: {
+      id: sherpId
+    },
+  } = req;
+  if (!name || !address || !meterRead || !meterNum) {
+    throw new BadRequestError("name, address, meter Number or meter Reading fields cannot be empty");
+  }
+
+  const sherp = await Sherp.findOneAndUpdate({
+      _id: sherpId,
+      initBy: email
+    },
+    req.body, {
+      new: true,
+      runValidators: true
+    }
+  );
+
+
+  if (!sherp) {
+    throw new NotFoundError(`No sherp with id ${sherpId}`);
+  }
+  res.status(StatusCodes.OK).json({
+    sherp
+  });
+});
+
+const deleteSherp = asyncHandler(async (req, res) => {
+  const {
+    user: {
+      email
+    },
+    params: {
+      id: sherpId
+    },
+  } = req;
+  const sherp = await Sherp.findByIdAndRemove({
+    _id: sherpId,
+    initBy: email
+  })
+  if (!sherp) {
+    throw new NotFoundError(`No sherp with id ${sherpId}`);
+  }
+  res.status(StatusCodes.OK).send();
+});
+
+module.exports = {
+  getAllSherps,
+  getSherp,
+  createSherp,
+  updateSherp,
+  deleteSherp,
+};
