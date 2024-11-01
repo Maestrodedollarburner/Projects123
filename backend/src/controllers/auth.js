@@ -30,7 +30,7 @@ const login = asyncHandler(async (req, res) => {
     throw new UnauthentiacatedError("Invalid credentials");
   }
   const token = user.createJWT();
-  res.status(StatusCodes.OK).json({ user: { email: user.email }, token });
+  res.status(StatusCodes.OK).json({ user: { email: user.email, name: user.fullname }, token });
 });
 
 module.exports = {

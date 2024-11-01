@@ -71,23 +71,34 @@ a{
 .sm-header{
     position: fixed;
     display: none;
-    bottom: 0;
+    bottom: 1rem;
     background-color: #f2f2f2;
     height: 50px;
     border-radius: 2rem;
+    padding: 0.5rem;
     border:0.5px solid gray;
 }
 .hide{
     visibility: hidden;
 }
-.sm-nav-items a{
-    padding: 1rem;
-    border-radius: 100%;
+.sm-header nav{
+     height: 100%;
+}
+.sm-nav-links{
     display: flex;
+    align-items: center;
     justify-content: space-evenly;
+    height: 100%;
+}
+.sm-nav-links a{
+    padding: 0.5rem;
+    border-radius: 100%;
+    width: max-content;
+    
 }
 /* content */
-#dashboard, #shep-body{
+
+#dashboard, #confirmation, #shep-body, #profile{
     display: flex;
     height: 100vh;
     gap: 2rem

@@ -29,18 +29,15 @@ const createSherp = asyncHandler(async (req, res) => {
 
 const getSherp = asyncHandler(async (req, res) => {
   const {
-    user: {
-      email
-    },
+  
     params: {
-      id: sherpId
+      id: meterNum
     },
   } = req;
   const sherp = await Sherp.findOne({
-    _id: sherpId,
-    initBy: email,
+    meterNum
   });
-  if (!email) {
+  if (!meterNum) {
     throw new NotFoundError("No Sherp with id found");
   }
   res.status(StatusCodes.OK).json({
@@ -50,26 +47,28 @@ const getSherp = asyncHandler(async (req, res) => {
 
 const updateSherp = asyncHandler(async (req, res) => {
   const {
-    body: {
       name,
       address,
-      meterNum,
       meterRead
-    },
-    user: {
-      userId
-    },
+
+    } = req.body
+    
+    const {
+   
+  
     params: {
-      id: sherpId
+      id: meterNum
     },
   } = req;
+  console.log(meterNum, name,
+    address,
+    meterRead)
   if (!name || !address || !meterRead || !meterNum) {
     throw new BadRequestError("name, address, meter Number or meter Reading fields cannot be empty");
   }
 
   const sherp = await Sherp.findOneAndUpdate({
-      _id: sherpId,
-      initBy: email
+      meterNum
     },
     req.body, {
       new: true,

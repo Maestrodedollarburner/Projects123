@@ -1,4 +1,5 @@
 const conts = document.querySelector('.contributors')
+const logout = document.querySelector('.logout')
 const statVal = document.querySelectorAll('.stat-val')
 const token = localStorage.getItem('jwtToken')
 let contributors = []
@@ -55,4 +56,8 @@ getAllSherps()
 
 
 
-
+logout.addEventListener('click', ()=>{
+  localStorage.removeItem("jwtToken");
+  localStorage.removeItem("user-email");
+  window.location.replace("signin.html");
+})
