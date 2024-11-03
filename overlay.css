@@ -16,7 +16,7 @@
 .m-num, .m-read{
     display: none;
 }
-.hidden{
+.show{
     display: flex;
 }
 .disappear{

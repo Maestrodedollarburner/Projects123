@@ -2,6 +2,11 @@ const email = document.querySelector('#email')
 const password = document.querySelector('#password')
 const err = ''
 const logInBtn = document.querySelector('.log-in-btn')
+const token = localStorage.getItem('jwtToken')
+
+if(token){
+  window.location.replace("dashboard.html");
+}
 
 logInBtn.addEventListener('click', async() => {
   try {

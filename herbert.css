@@ -1,7 +1,6 @@
 *{
     padding: 0;
     margin: 0;
-    border-sizing: border-box;
 }
 
 body {
@@ -15,7 +14,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    /* height: 100%; */
     width: 100%;
 
 }
@@ -29,10 +28,7 @@ label{
     margin: 1rem 0;
 
 }
-form{
-    width: 50%;
 
-}
 .input input{
     border-radius: 2rem;
 }
@@ -54,22 +50,56 @@ form{
     text-align: center;
     margin-top: 1rem;
 }
-#signup .form-group, #shep .form-group{
+.form-shep{
+    padding-top: 4rem;
+}
+#signup .form-group,  .form-group{
     width: 60%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto;
+    /* margin: 0 auto; */
     gap: 1rem;
 }
-#signup{
+/* #signup{
     margin-top: 5rem;
-}
+} */
 .form-group button, .form-group a{
     border-radius: 2rem;
     
 }
-#shep .form-group button{
-    margin-top: 1rem;
+
+#shep .form-btn{
+    margin: 2rem auto;
+    width: max-content;
+   
+}
+#shep .form-btn button{
+    border-radius: 2rem;
 }
 
+@media (min-width:300px) {
+    #signup, #signin{
+        width: 90%;
+    }
+    #signup form,  #signin form, #shep form{
+        width: 100%;
+    }
+}
+
+@media (min-width:600px) {
+    #signup, #signin{
+        width: 50%;
+    }
+    #signup form,  #signin form, #shep form{
+        width: 100%;
+    }
+}
+@media (min-width:1050px) {
+    #signup, #signin{
+        width: 30%;
+    }
+    #signup form, #signin form, #shep form{
+        width: 100%;
+    }
+}

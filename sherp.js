@@ -1,114 +1,58 @@
-const {
-  StatusCodes
-} = require("http-status-codes");
-const Sherp = require("../models/sherp");
-const {
-  BadRequestError,
-  NotFoundError
-} = require("../errors");
-const asyncHandler = require('express-async-handler')
+const meterName = document.querySelector('#meterName')
+const address = document.querySelector('#address')
+const meterNum = document.querySelector('#meterNum')
+const meterRead = document.querySelector('#meterReadings')
+const saveBtn = document.querySelector('.save')
+const err = ''
+const token = localStorage.getItem('jwtToken')
+const overlay = document.querySelector('.overlay')
+const cls = document.querySelector('.cls-btn')
+const oName = document.querySelector('overlay-name')
+const oRead = document.querySelector('overlay-read')
+const oNum = document.querySelector('overlay-num')
+const oAddress = document.querySelector('overlay-address')
+if (!token) {
+  window.location.replace("signin.html");
+}
 
-const getAllSherps = asyncHandler(async (req, res) => {
-  const sherp = await Sherp.find({
-    initBy: req.user.userId
-  }).sort("createdAt");
-  res.status(StatusCodes.OK).json({
-    sherp,
-    count: sherp.length
-  });
-})
+cls.addEventListener('click', () => overlay.classList.remove('show'))
+saveBtn.addEventListener('click', async () => {
+  const userEmail = localStorage.getItem('user-email')
 
-const createSherp = asyncHandler(async (req, res) => {
-  // req.body.initBy = req.user.email;
-  const sherp = await Sherp.create(req.body);
-  res.status(StatusCodes.CREATED).json({
-    sherp
-  });
-  // res.send(req.body)
-});
+  try {
+    const data = await fetch("http://localhost:5000/api/v1/sherp", {
+      method: "POST",
+      body: JSON.stringify({
+        name: meterName.value,
+        address: address.value,
+        meterRead: meterRead.value,
+        meterNum: meterNum.value,
+        initBy: userEmail
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
+      },
+    });
+    const dd = await data.json();
+    overlay.classList.add('show')
+    oName.textContent = meterName.value
+    oAddress.textContent = address.value
+    oRead.textContent = meterRead.value
+    oNum.textContent  = meterNum.value
+    
+    if (dd.msg) {
+      err.textContent = dd.msg;
 
-const getSherp = asyncHandler(async (req, res) => {
-  const {
-    user: {
-      email
-    },
-    params: {
-      id: sherpId
-    },
-  } = req;
-  const sherp = await Sherp.findOne({
-    _id: sherpId,
-    initBy: email,
-  });
-  if (!email) {
-    throw new NotFoundError("No Sherp with id found");
-  }
-  res.status(StatusCodes.OK).json({
-    sherp
-  });
-});
+    } else {
 
-const updateSherp = asyncHandler(async (req, res) => {
-  const {
-    body: {
-      name,
-      address,
-      meterNum,
-      meterRead
-    },
-    user: {
-      userId
-    },
-    params: {
-      id: sherpId
-    },
-  } = req;
-  if (!name || !address || !meterRead || !meterNum) {
-    throw new BadRequestError("name, address, meter Number or meter Reading fields cannot be empty");
-  }
+      console.log(dd);
 
-  const sherp = await Sherp.findOneAndUpdate({
-      _id: sherpId,
-      initBy: email
-    },
-    req.body, {
-      new: true,
-      runValidators: true
+      // window.location.replace("dashboard.html");
     }
-  );
+  } catch (error) {
+    console.log(error);
 
-
-  if (!sherp) {
-    throw new NotFoundError(`No sherp with id ${sherpId}`);
   }
-  res.status(StatusCodes.OK).json({
-    sherp
-  });
-});
 
-const deleteSherp = asyncHandler(async (req, res) => {
-  const {
-    user: {
-      email
-    },
-    params: {
-      id: sherpId
-    },
-  } = req;
-  const sherp = await Sherp.findByIdAndRemove({
-    _id: sherpId,
-    initBy: email
-  })
-  if (!sherp) {
-    throw new NotFoundError(`No sherp with id ${sherpId}`);
-  }
-  res.status(StatusCodes.OK).send();
-});
-
-module.exports = {
-  getAllSherps,
-  getSherp,
-  createSherp,
-  updateSherp,
-  deleteSherp,
-};
+})
