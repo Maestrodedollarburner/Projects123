@@ -14,7 +14,7 @@ const oRead = document.querySelector('.overlay-read')
 const oNum = document.querySelector('.overlay-num')
 const oAddress = document.querySelector('.overlay-address')
 if (!token) {
-  window.location.replace("signin.html");
+  window.location.replace("index.html");
 }
 
 cls.addEventListener('click', () => overlay.classList.remove('show'))

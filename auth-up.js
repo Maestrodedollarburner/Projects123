@@ -47,7 +47,7 @@ logInBtn.addEventListener('click', async() => {
       email.value = "";
       fullname.value = "";
       staffId.value = "";
-      window.location.replace("signin.html");
+      window.location.replace("index.html");
     }
   } catch (error) {
     console.log(error);

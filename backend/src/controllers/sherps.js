@@ -52,7 +52,7 @@ const updateSherp = asyncHandler(async (req, res) => {
       meterRead
 
     } = req.body
-    
+    // console.log(req.body)
     const {
    
   
@@ -60,9 +60,9 @@ const updateSherp = asyncHandler(async (req, res) => {
       id: meterNum
     },
   } = req;
-  console.log(meterNum, name,
-    address,
-    meterRead)
+  // console.log(meterNum, name,
+  //   address,
+  //   meterRead)
   if (!name || !address || !meterRead || !meterNum) {
     throw new BadRequestError("name, address, meter Number or meter Reading fields cannot be empty");
   }
@@ -78,7 +78,7 @@ const updateSherp = asyncHandler(async (req, res) => {
 
 
   if (!sherp) {
-    throw new NotFoundError(`No sherp with id ${sherpId}`);
+    throw new NotFoundError(`No sherp with id ${meterNum}`);
   }
   res.status(StatusCodes.OK).json({
     sherp

@@ -4,7 +4,7 @@ const statVal = document.querySelectorAll('.stat-val')
 const token = localStorage.getItem('jwtToken')
 let contributors = []
 if (!token) {
-  window.location.replace("signin.html");
+  window.location.replace("index.html");
 }
 
 function logUniqueInitByFromObject(data) {
