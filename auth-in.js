@@ -11,7 +11,7 @@ if(token){
 logInBtn.addEventListener('click', async() => {
   logInBtn.classList.add('show')
   try {
-    const data = await fetch("http://localhost:5000/api/v1/auth/login", {
+    const data = await fetch("http://localhost:3000/api/v1/auth/login", {
       method: "POST",
       body: JSON.stringify({
         email: email.value,

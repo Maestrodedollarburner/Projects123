@@ -31,6 +31,7 @@ app.use(notFound)
 
 //routes
 
+
 const start = async() => {
     try {
         await connectDB(process.env.CONNECTION_STRING)
