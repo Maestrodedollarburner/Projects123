@@ -30,7 +30,9 @@ app.use(errorHandler)
 app.use(notFound)
 
 //routes
-
+app.get('/', (req, res) => {
+    res.status(200).json('Welcome, your app is working well');
+  })
 
 const start = async() => {
     try {
