@@ -21,6 +21,9 @@ body {
 .sherp-con, .confirm{
     height: unset;
 }
+.err{
+    color: rgb(245, 36, 36);
+}
 .sign-head{
     font-weight: 500;
     text-align: center;

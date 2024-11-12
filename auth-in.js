@@ -1,6 +1,6 @@
 const email = document.querySelector('#email')
 const password = document.querySelector('#password')
-const err = ''
+const err = document.querySelector('.err')
 const logInBtn = document.querySelector('.log-in-btn')
 const token = localStorage.getItem('jwtToken')
 const spinner = document.querySelector('.spinner')

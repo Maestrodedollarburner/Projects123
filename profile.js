@@ -11,7 +11,7 @@ if (!token) {
 logout.addEventListener('click', ()=>{
   localStorage.removeItem("jwtToken");
   localStorage.removeItem("user-email");
-  window.location.replace("signin.html");
+  window.location.replace("index.html");
 })
 profileName.textContent = username
 userEmail.textContent = email

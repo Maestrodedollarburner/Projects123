@@ -61,7 +61,7 @@ saveBtn.addEventListener('click', async () => {
 logout.addEventListener('click', () => {
   localStorage.removeItem("jwtToken");
   localStorage.removeItem("user-email");
-  window.location.replace("signin.html");
+  window.location.replace("index.html");
 })
 
 

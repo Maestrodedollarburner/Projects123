@@ -2,7 +2,7 @@ const email = document.querySelector('#email')
 const password = document.querySelector('#password')
 const fullname = document.querySelector('#fullname')
 const staffId = document.querySelector('#staffID')
-const err = ''
+const err = document.querySelector('.err')
 const logInBtn = document.querySelector('.submit-btn')
 const resetBtn = document.querySelector('.reset-btn')
 const token = localStorage.getItem('jwtToken')
@@ -34,7 +34,9 @@ logInBtn.addEventListener('click', async() => {
       },
     });
     const dd = await data.json();
+    
     if (dd.msg) {
+      console.log(dd)
       err.textContent = dd.msg;
       email.value = "";
       password.value = "";
