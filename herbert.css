@@ -131,6 +131,7 @@ label{
     display: none;
 }
 
+
 .text-3xl{
     font-size: 10rem;
 }
@@ -159,6 +160,9 @@ label{
 }
 .save:disabled{
     opacity: 20%;
+}
+.mt-3{
+    margin-top: 12px;
 }
 
 @media (min-width:300px) {
