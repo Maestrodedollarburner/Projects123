@@ -6,7 +6,8 @@ const meterReading = document.querySelector('#meter-readings')
 const meterNumber = document.querySelector('#meter-num')
 const saveBtn = document.querySelector('.save')
 const updateBtn = document.querySelector('.save-edit')
-const err = ''
+const err = document.querySelector('.err')
+const stat = document.querySelector('.status')
 const token = localStorage.getItem('jwtToken')
 const overlay = document.querySelector('.overlay')
 const cls = document.querySelector('.cls-btn')
@@ -35,8 +36,8 @@ saveBtn.addEventListener('click', async () => {
     dd = await data.json();
 
 
-    if (dd.msg) {
-      err.textContent = dd.msg;
+    if (!dd.sherp) {
+      err.textContent = 'sherp not found';
       saveBtn.classList.remove('show')
       meterNum.value = ''
     } else {
@@ -53,6 +54,7 @@ saveBtn.addEventListener('click', async () => {
     console.log(error);
     saveBtn.classList.remove('show')
     meterNum.value = ''
+    err.textContent = error;
 
   }
 
@@ -82,8 +84,9 @@ cancelBtn.addEventListener('click', () => {
 })
 
 updateBtn.addEventListener('click', async () => {
+  console.log(oNum.textContent.split(' ')[2])
   try {
-    const data = await fetch(`http://localhost:5000/api/v1/sherp/${meterNumber.value}`, {
+    const data = await fetch(`http://localhost:5000/api/v1/sherp/${oNum.textContent.split(' ')[2]}`, {
       method: "PATCH",
       body: JSON.stringify({
         name: meterName.value,
@@ -91,6 +94,7 @@ updateBtn.addEventListener('click', async () => {
         meterRead: meterReading.value,
         meterNum: meterNumber.value
       }),
+
       headers: {
         "Content-Type": "application/json",
         // 'Authorization': `Bearer ${token}`
@@ -99,14 +103,7 @@ updateBtn.addEventListener('click', async () => {
  const res = await data.json();
     console.log(dd, res, meterNumber.value, meterReading.value)
 
-    if (res.msg) {
-      err.textContent = res.msg;
-      saveBtn.classList.remove('show')
-
-    } else {
-
-
-   
+    if (res.sherp) {
     overlay.classList.add('show')
     oName.textContent = `Meter Name: ${res.sherp.name}`
     oAddress.textContent = `Meter Address: ${res.sherp.address}`
@@ -115,11 +112,21 @@ updateBtn.addEventListener('click', async () => {
       // window.location.replace("dashboard.html");
       editConf.classList.remove('show')
       pop.classList.remove('hide')
+      meterName.value = ''
+       meterAddress.value = ''
+       meterReading.value = ''
+       meterNumber.value = ''
+      stat.textContent = 'Sherp updated'
+    }
+    else{
+      saveBtn.classList.remove('show')
+      stat.textContent = 'Could not update sherp. Try again'
 
     }
   } catch (error) {
     console.log(error);
     saveBtn.classList.remove('show')
+    stat.textContent = 'Could not update sherp. Try again'
 
   }
 

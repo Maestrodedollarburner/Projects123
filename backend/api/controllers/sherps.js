@@ -61,15 +61,15 @@ const updateSherp = asyncHandler(async (req, res) => {
     },
   } = req;
   // console.log(meterNum, name,
-  //   address,
+  //   address, 
   //   meterRead)
   if (!name || !address || !meterRead || !meterNum) {
     throw new BadRequestError("name, address, meter Number or meter Reading fields cannot be empty");
   }
-
+ 
   const sherp = await Sherp.findOneAndUpdate({
       meterNum
-    },
+    }, 
     req.body, {
       new: true,
       runValidators: true
@@ -83,6 +83,7 @@ const updateSherp = asyncHandler(async (req, res) => {
   res.status(StatusCodes.OK).json({
     sherp
   });
+  console.log(sherp, req.body)
 });
 
 const deleteSherp = asyncHandler(async (req, res) => {
